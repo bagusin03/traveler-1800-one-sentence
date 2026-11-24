@@ -17,7 +17,29 @@ const SENTENCE =
 
 // Enforce the sealed gate's own rule at runtime: one sentence, 1-200
 // characters, never only whitespace. Fail loudly instead of writing an
-// invalid entry.
+// invalid entry. Also enforce the brief's core rule: no word coined after
+// the traveler's time may slip into the sentence — reject the banned
+// post-1800 words outright so a future edit cannot break the entry.
+const BANNED_AFTER_1800 = [
+  "internet",
+  "computer",
+  "electric",
+  "screen",
+  "online",
+  "website",
+  "digital",
+  "phone",
+  "television",
+  "radio",
+  "video",
+  "software",
+];
+const lower = SENTENCE.toLowerCase();
+for (const word of BANNED_AFTER_1800) {
+  if (lower.includes(word)) {
+    throw new Error(`sentence uses a word coined after 1800: ${word}`);
+  }
+}
 if (
   SENTENCE.length < 1 ||
   SENTENCE.length > 200 ||
